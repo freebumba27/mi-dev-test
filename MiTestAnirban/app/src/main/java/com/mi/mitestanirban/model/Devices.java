@@ -10,7 +10,7 @@ import java.util.ArrayList;
  */
 public class Devices {
 
-    private int DeviceId;
+    private int Id;
     private int androidId;
     private String carrier;
     private String imageUrl;
@@ -26,12 +26,12 @@ public class Devices {
         this.name = name;
     }
 
-    public int getDeviceId() {
-        return DeviceId;
+    public int getId() {
+        return Id;
     }
 
-    public void setDeviceId(int DeviceId) {
-        this.DeviceId = DeviceId;
+    public void setId(int Id) {
+        this.Id = Id;
     }
 
     public int getAndroidId() {

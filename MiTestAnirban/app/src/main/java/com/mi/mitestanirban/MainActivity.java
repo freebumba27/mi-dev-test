@@ -1,5 +1,6 @@
 package com.mi.mitestanirban;
 
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -13,9 +14,13 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.mi.mitestanirban.events.GetDeviceListEvent;
+import com.mi.mitestanirban.model.Devices;
 import com.mi.mitestanirban.model.GetAllDeviceListJob;
+import com.mi.mitestanirban.utils.MyDatabase;
 import com.mi.mitestanirban.utils.ReusableClass;
 import com.mi.mitestanirban.widgets.DeviceListAdapter;
+
+import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -33,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout progressContainer;
 
     private DeviceListAdapter mAdapter;
+    private MyDatabase db;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        db = new MyDatabase(this);
         mAdapter = new DeviceListAdapter(this);
 
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
@@ -82,7 +90,32 @@ public class MainActivity extends AppCompatActivity {
     public void onEventMainThread(GetDeviceListEvent.Success event) {
         setListShown(true, true);
 
-        mAdapter.addAll(event.getDevicesArrayList());
+        db.deleteAllDevice();
+
+        ArrayList<Devices> devices = event.getDevicesArrayList();
+        for (int i = 0; i < devices.size(); i++) {
+            db.insertDevices(devices.get(i).getId(), devices.get(i).getAndroidId(), devices.get(i).getImageUrl(),
+                    devices.get(i).getName(), devices.get(i).getSnippet());
+        }
+
+        Cursor cursor = db.getAllDevice();
+        ArrayList<Devices> myDevices = new ArrayList<>();
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                Devices device = new Devices();
+                device.setId(cursor.getInt(0));
+                device.setAndroidId(cursor.getInt(1));
+                device.setImageUrl(cursor.getString(2));
+                device.setName(cursor.getString(3));
+                device.setSnippet(cursor.getString(4));
+
+                myDevices.add(device);
+            }
+            cursor.close();
+        }
+
+
+        mAdapter.addAll(myDevices);
     }
 
     public void onEventMainThread(GetDeviceListEvent.Fail event) {
