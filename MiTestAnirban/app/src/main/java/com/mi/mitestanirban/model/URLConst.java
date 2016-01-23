@@ -10,7 +10,7 @@ public class URLConst {
     private static final String ANDROID_VERSION_API = BASE_URL + "/android";
     private static final String DEVICES_API = BASE_URL + "/devices";
 
-    public static String getDevice() {
+    public static String device() {
         return Uri.parse(DEVICES_API).buildUpon()
                 .toString();
     }

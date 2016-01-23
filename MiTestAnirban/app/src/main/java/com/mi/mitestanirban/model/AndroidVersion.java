@@ -1,5 +1,10 @@
 package com.mi.mitestanirban.model;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.util.ArrayList;
+
 /**
  * Created by Dream on 22-Jan-16.
  */
@@ -11,6 +16,11 @@ public class AndroidVersion {
     private String codename;
     private String target;
     private String distribution;
+
+    public static ArrayList<AndroidVersion> toList(String json) {
+        return new Gson().fromJson(json, new TypeToken<ArrayList<AndroidVersion>>() {
+        }.getType());
+    }
 
     public int getId() {
         return id;

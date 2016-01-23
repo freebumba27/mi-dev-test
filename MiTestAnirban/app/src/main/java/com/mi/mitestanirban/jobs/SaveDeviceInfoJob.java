@@ -1,4 +1,4 @@
-package com.mi.mitestanirban.model;
+package com.mi.mitestanirban.jobs;
 
 import android.content.Context;
 import android.util.Log;
@@ -6,13 +6,15 @@ import android.util.Log;
 import com.koushikdutta.ion.Ion;
 import com.koushikdutta.ion.Response;
 import com.mi.mitestanirban.MyApplication;
-import com.mi.mitestanirban.events.GetDeviceListEvent;
+import com.mi.mitestanirban.events.GetDeviceEvent;
+import com.mi.mitestanirban.model.Device;
+import com.mi.mitestanirban.model.DeviceAdding;
+import com.mi.mitestanirban.model.URLConst;
 import com.mi.mitestanirban.utils.Priority;
 import com.path.android.jobqueue.Job;
 import com.path.android.jobqueue.Params;
 
 import java.net.HttpURLConnection;
-import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import de.greenrobot.event.EventBus;
@@ -20,15 +22,16 @@ import de.greenrobot.event.EventBus;
 /**
  * Created by AJ on 1/22/16.
  */
-public class GetAllDeviceListJob extends Job {
+public class SaveDeviceInfoJob extends Job {
 
     private static final AtomicInteger jobCounter = new AtomicInteger(0);
     private final int id;
+    private DeviceAdding deviceAdding;
 
-
-    public GetAllDeviceListJob() {
+    public SaveDeviceInfoJob(DeviceAdding deviceAdding) {
         super(new Params(Priority.HIGH).requireNetwork());
         id = jobCounter.incrementAndGet();
+        this.deviceAdding = deviceAdding;
     }
 
 
@@ -47,13 +50,13 @@ public class GetAllDeviceListJob extends Job {
 
         Context context = MyApplication.getInstance();
 
-        String url = URLConst.getDevice();
+        String url = URLConst.device();
         Log.d("TAG", "url = " + url);
 
         Response<String> response = Ion.with(context)
-                .load("GET", url)
+                .load("POST", url)
                 .addHeader("Content-Type", "application/json")
-                .setStringBody("")
+                .setStringBody(deviceAdding.toString())
                 .asString()
                 .withResponse()
                 .get();
@@ -61,13 +64,13 @@ public class GetAllDeviceListJob extends Job {
         String json = response.getResult();
         Log.d("TAG", "response = " + json);
 
-        if (response.getHeaders().code() != HttpURLConnection.HTTP_OK) {
-            EventBus.getDefault().post(new GetDeviceListEvent.Fail(new Exception(json)));
+        if (response.getHeaders().code() != HttpURLConnection.HTTP_CREATED) {
+            EventBus.getDefault().postSticky(new GetDeviceEvent.Fail(new Exception(json)));
             return;
         }
 
-        ArrayList<Devices> devicesArrayList = Devices.toList(json);
-        EventBus.getDefault().post(new GetDeviceListEvent.Success(devicesArrayList));
+        Device device = Device.fromJson(json);
+        EventBus.getDefault().post(new GetDeviceEvent.Success(device));
     }
 
     @Override
@@ -77,7 +80,7 @@ public class GetAllDeviceListJob extends Job {
 
     @Override
     protected boolean shouldReRunOnThrowable(Throwable throwable) {
-        EventBus.getDefault().post(new GetDeviceListEvent.Fail(new Exception(throwable.getMessage())));
+        EventBus.getDefault().post(new GetDeviceEvent.Fail(new Exception(throwable.getMessage())));
         return false;
     }
 }

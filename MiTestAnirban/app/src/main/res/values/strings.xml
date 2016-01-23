@@ -2,4 +2,11 @@
     <string name="app_name">Mi Test Anirban</string>
     <string name="action_settings">Settings</string>
     <string name="error_internet_connection">Sorry no internet connection</string>
+    <string name="detail_label">Device Details</string>
+    <string name="hint_type_device_name">Type Device Name</string>
+    <string name="hint_type_device_desc">Type Device Description</string>
+    <string name="save">Save</string>
+    <string name="completed">Complete</string>
+    <string name="error">Error</string>
+    <string name="add_device_label">Add Device</string>
 </resources>

@@ -20,6 +20,11 @@ public class MyDatabase extends SQLiteAssetHelper {
     private static final String KEY_NAME = "name";
     private static final String KEY_SNIPPET = "snippet";
     private static final String TABLE_DEVICE = "device_tbl";
+    private static final String TABLE_ANDROID_VERSION = "android_version_tbl";
+    private static final String KEY_VERSION = "version";
+    private static final String KEY_CODENAME = "codename";
+    private static final String KEY_TARGET = "target";
+    private static final String KEY_DISTRIBUTION = "distribution";
 
     public MyDatabase(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -37,15 +42,41 @@ public class MyDatabase extends SQLiteAssetHelper {
         return db.insert(TABLE_DEVICE, null, initialValues);
     }
 
-    public Cursor getAllDevice() {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("SELECT * FROM " + TABLE_DEVICE, null);
-        return res;
-    }
-
     public void deleteAllDevice() {
         SQLiteDatabase db = this.getReadableDatabase();
         db.execSQL("delete from " + TABLE_DEVICE);
+
     }
 
+    public long insertAndroidVersions(int id, String name, String version, String codename, String target, String distribution) {
+        SQLiteDatabase db = getReadableDatabase();
+
+        ContentValues initialValues = new ContentValues();
+        initialValues.put(KEY_ID, id);
+        initialValues.put(KEY_NAME, name);
+        initialValues.put(KEY_VERSION, version);
+        initialValues.put(KEY_CODENAME, codename);
+        initialValues.put(KEY_TARGET, target);
+        initialValues.put(KEY_DISTRIBUTION, distribution);
+        return db.insert(TABLE_ANDROID_VERSION, null, initialValues);
+    }
+
+    public void deleteAllAndroidVersion() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        db.execSQL("delete from " + TABLE_ANDROID_VERSION);
+    }
+
+    public Cursor getAllDeviceWithAndroidVersion() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("SELECT device_tbl.id, device_tbl.imageUrl, device_tbl.name, device_tbl.snippet," +
+                " android_version_tbl.id, android_version_tbl.name, android_version_tbl.version " +
+                "FROM device_tbl JOIN android_version_tbl ON device_tbl.androidId=android_version_tbl.id;", null);
+        return res;
+    }
+
+    public Cursor getAndroidVersionAndId() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("SELECT id, name, version FROM android_version_tbl", null);
+        return res;
+    }
 }

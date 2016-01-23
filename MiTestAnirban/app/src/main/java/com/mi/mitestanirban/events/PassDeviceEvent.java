@@ -4,12 +4,10 @@ import android.util.Log;
 
 import com.mi.mitestanirban.model.Device;
 
-import java.util.ArrayList;
-
 /**
  * Created by AJ on 1/22/16.
  */
-public class GetDeviceListEvent {
+public class PassDeviceEvent {
 
     public static class Fail {
         Exception ex;
@@ -27,14 +25,14 @@ public class GetDeviceListEvent {
 
     public static class Success {
 
-        ArrayList<Device> deviceArrayList;
+        Device device;
 
-        public Success(ArrayList<Device> deviceArrayList) {
-            this.deviceArrayList = deviceArrayList;
+        public Success(Device device) {
+            this.device = device;
         }
 
-        public ArrayList<Device> getDeviceArrayList() {
-            return deviceArrayList;
+        public Device getDevice() {
+            return device;
         }
 
     }

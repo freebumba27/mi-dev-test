@@ -1,22 +1,21 @@
 package com.mi.mitestanirban.model;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.util.ArrayList;
 
 /**
  * Created by Dream on 22-Jan-16.
  */
-public class Devices {
+public class DeviceAdding {
 
-    private int Id;
     private int androidId;
     private String carrier;
     private String imageUrl;
     private String name;
     private String snippet;
 
+    public static DeviceAdding fromJson(String json) {
+        return new Gson().fromJson(json, DeviceAdding.class);
+    }
 
     public String getName() {
         return name;
@@ -24,14 +23,6 @@ public class Devices {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public int getId() {
-        return Id;
-    }
-
-    public void setId(int Id) {
-        this.Id = Id;
     }
 
     public int getAndroidId() {
@@ -66,8 +57,8 @@ public class Devices {
         this.snippet = snippet;
     }
 
-    public static ArrayList<Devices> toList(String json) {
-        return new Gson().fromJson(json, new TypeToken<ArrayList<Devices>>() {
-        }.getType());
+    @Override
+    public String toString() {
+        return new Gson().toJson(this);
     }
 }

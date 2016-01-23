@@ -2,14 +2,14 @@ package com.mi.mitestanirban.events;
 
 import android.util.Log;
 
-import com.mi.mitestanirban.model.Device;
+import com.mi.mitestanirban.model.AndroidVersion;
 
 import java.util.ArrayList;
 
 /**
  * Created by AJ on 1/22/16.
  */
-public class GetDeviceListEvent {
+public class GetAndroidVersionListEvent {
 
     public static class Fail {
         Exception ex;
@@ -27,14 +27,14 @@ public class GetDeviceListEvent {
 
     public static class Success {
 
-        ArrayList<Device> deviceArrayList;
+        ArrayList<AndroidVersion> androidVersions;
 
-        public Success(ArrayList<Device> deviceArrayList) {
-            this.deviceArrayList = deviceArrayList;
+        public Success(ArrayList<AndroidVersion> androidVersions) {
+            this.androidVersions = androidVersions;
         }
 
-        public ArrayList<Device> getDeviceArrayList() {
-            return deviceArrayList;
+        public ArrayList<AndroidVersion> getandroidVersionArrayList() {
+            return androidVersions;
         }
 
     }
