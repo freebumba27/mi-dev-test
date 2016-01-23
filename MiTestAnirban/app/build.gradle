@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.mi.mitestanirban"
-        minSdkVersion 10
+        minSdkVersion 11
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -32,5 +32,4 @@ dependencies {
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.android.support:recyclerview-v7:23.1.1'
     compile 'com.google.code.gson:gson:2.4'
-    compile 'com.github.satyan:sugar:1.4'
 }

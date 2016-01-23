@@ -4,6 +4,7 @@ package com.mi.mitestanirban.model;
  * Created by Dream on 22-Jan-16.
  */
 public class AndroidVersion {
+
     private int id;
     private String name;
     private String version;
